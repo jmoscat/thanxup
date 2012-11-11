@@ -1,0 +1,13 @@
+%h1 Owners
+
+= link_to "All Owners", :action => "index"
+|
+= link_to "Owners awaiting approval", :action => "index", :approved => "false"
+
+%table
+	- @owners.each do |owner|
+		%tr
+			%td= owner.email
+			%td= owner.approved
+			%td= link_to "Edit", edit_owner_path(owner)
+			%td= link_to "Delete", owner_path(owner), :method => :delete
