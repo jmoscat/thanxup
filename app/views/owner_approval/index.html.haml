@@ -1,13 +1,24 @@
-%h1 Owners
+.container
+  %h1 Owners
 
-= link_to "All Owners", :action => "index"
-|
-= link_to "Owners awaiting approval", :action => "index", :approved => "false"
+  = link_to "All Owners", :action => "index"
+  |
+  = link_to "Owners awaiting approval", :action => "index", :approved => "false"
 
-%table
-	- @owners.each do |owner|
-		%tr
-			%td= owner.email
-			%td= owner.approved
-			%td= link_to "Edit", edit_owner_path(owner)
-			%td= link_to "Delete", owner_path(owner), :method => :delete
+  %table
+    %tr
+      %th Name
+      %th Email
+      %th Approved?
+      %th City
+      %th State
+      %th Phone #
+      - @owners.each do |owner|
+        %tr
+          %td= owner.name
+          %td= owner.email
+          %td= owner.approved
+          %td= owner.city
+          %td= owner.state
+          %td= owner.phone_number
+          %td= link_to 'Toggle Approval', owner_admin_approve_owner_path(owner_id: owner.id), :method => :put
