@@ -8,7 +8,7 @@ class Owner < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation,
     :remember_me, :approved, :name, :company_name, :city,
-    :state, :phone_number
+    :state, :phone_number, :allow_phone_contact
 
   def active_for_authentication?
     super && approved?

@@ -24,6 +24,7 @@ class DeviseCreateOwners < ActiveRecord::Migration
       t.string :city
       t.string :state
       t.string :phone_number
+      t.boolean :allow_phone_contact, :default => false, :null => false
       t.boolean :approved, :default => false, :null => false
       t.timestamps
     end
