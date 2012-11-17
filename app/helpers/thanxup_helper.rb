@@ -1,0 +1,2 @@
+module ThanxupHelper
+end
