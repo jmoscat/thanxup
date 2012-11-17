@@ -13,17 +13,19 @@
           .nav-collapse.collapse
             %ul.nav.pull-right
               %li
-                %a{:href => "#"} About
+                = link_to 'About', about_path
               %li
-                %a{:href => "#"} Contact
+                = link_to 'Contact', contact_path
               - if current_owner
                 %li
                   = link_to 'View Your Stores', root_path
+                %li
+                  = link_to 'Logout', destroy_owner_session_path, method: :delete
+                %li
+                  = link_to current_owner.name, owner_path(id: current_owner.id)
               - else
                 %li
                   = link_to 'Signup for Thanxup', new_owner_registration_path
                 %li
                   = link_to 'Login', new_owner_session_path
-              - if owner_signed_in?
-                %li= link_to 'Logout', destroy_owner_session_path, :method => :delete
   = yield

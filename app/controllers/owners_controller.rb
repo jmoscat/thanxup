@@ -1,12 +1,12 @@
 class OwnersController < ApplicationController
-  def show
+  load_and_authorize_resource except: [:index, :new, :create, :destroy]
 
+  def show
   end
 
   def edit
   end
 
   def update
-
   end
 end
