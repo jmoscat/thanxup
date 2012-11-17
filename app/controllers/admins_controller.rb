@@ -19,6 +19,7 @@ class AdminsController < ApplicationController
   private
 
   def setup
+    authorize! :edit, Admin
     @owner = Owner.find(params[:owner_id])
   end
 end
