@@ -1,0 +1,84 @@
+- unless owner_signed_in? || admin_signed_in?
+  #myCarousel.carousel.slide
+    .carousel-inner
+      .item.active
+        %img{:src => "../assets/img/examples/slide-01.jpg", :alt => ""}
+        .container
+          .carousel-caption
+            %h1 Incentivize
+            %p.lead Give users more of a reason to visit your place of business with coupons, and allow them to reward you with social media exposure.
+            %a.btn.btn-large.btn-primary{:href => new_owner_registration_path} Sign up today
+      .item
+        %img{:src => "../assets/img/examples/slide-02.jpg", :alt => ""}
+        .container
+          .carousel-caption
+            %h1 Branch Out & Market
+            %p.lead Quickly branch out through the massive tree of social media users by letting users do the marketing for you, through tweets and facebook posts.
+            %a.btn.btn-large.btn-primary{:href => about_path} Learn more
+      .item
+        %img{:src => "../assets/img/examples/slide-02.jpg", :alt => ""}
+        .container
+          .carousel-caption
+            %h1 Another example headline
+            %p.lead Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+            %a.btn.btn-large.btn-primary{:href => "#"} Learn more
+    %a.left.carousel-control{:href => "#myCarousel", "data-slide" => "prev"} &lsaquo;
+    %a.right.carousel-control{:href => "#myCarousel", "data-slide" => "next"} &rsaquo;
+
+  .container.marketing
+    .row
+      .span4
+        %img{:class => "img-circle", :src => "http://placehold.it/140x140"}
+        %h2 Heading
+        %p Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
+        %p
+          %a{:class => "btn", :href => "#"}View details &raquo;
+      .span4
+        %img{:class => "img-circle", :src => "http://placehold.it/140x140"}
+        %h2 Heading
+        %p Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
+        %p
+          %a{:class => "btn", :href => "#"}View details &raquo;
+      .span4
+        %img{:class => "img-circle", :src => "http://placehold.it/140x140"}
+        %h2 Heading
+        %p Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
+        %p
+          %a{:class => "btn", :href => "#"}View details &raquo;
+
+    %hr.featurette-divider
+
+    .featurette
+      %img.featurette-image.pull-right{:src => "../assets/img/examples/browser-icon-chrome.png"}
+      %h2.featurette-heading
+        First featurette headling.
+        %span.muted It'll blow your mind.
+      %p.lead Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.
+
+    %hr.featurette-divider
+
+    .featurette
+      %img.featurette-image.pull-right{:src => "../assets/img/examples/browser-icon-chrome.png"}
+      %h2.featurette-heading
+        First featurette headling.
+        %span.muted It'll blow your mind.
+      %p.lead Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.
+
+    %hr.featurette-divider
+
+    .featurette
+      %img.featurette-image.pull-right{:src => "../assets/img/examples/browser-icon-chrome.png"}
+      %h2.featurette-heading
+        First featurette headling.
+        %span.muted It'll blow your mind.
+      %p.lead Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.
+
+    %hr.featurette-divider
+
+    %footer
+      %p.pull-right
+        %a{:href => "#"} Back to top
+      %p
+        &copy; 2012 Thanxup, Inc. &middot;
+        %a{:href => "#"} Privacy &middot;
+        %a{:href => "#"} Terms &middot;
