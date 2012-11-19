@@ -1,0 +1,27 @@
+= form_for [current_owner, @store, @coupon] do |f|
+  %div
+    = f.label :title
+    = f.text_field :title
+  %div
+    = f.label :description
+    = f.text_field :description
+  %div
+    = f.label :type
+    = f.text_field :type
+  %div
+    = f.label :start_date
+    = f.text_field :start_date
+  %div
+    = f.label :end_date
+    = f.text_field :end_date
+  %div
+    = f.label :money_off
+    = f.text_field :money_off
+  %div
+    = f.label :percent_off
+    = f.text_field :percent_off
+  %div
+    = f.label :enabled
+    = f.check_box :enabled
+  %div
+    = f.submit

@@ -1,3 +1,5 @@
+require 'ripple'
+
 class Owner < ActiveRecord::Base
   after_create :send_owner_mail
 
@@ -30,5 +32,9 @@ class Owner < ActiveRecord::Base
 
   def send_owner_mail
     ThanxupMailer.new_owner_waiting_for_approval(self).deliver
+  end
+
+  def stores
+    store = Store.find_by_index('owner_id', self.id.to_s)
   end
 end

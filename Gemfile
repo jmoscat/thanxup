@@ -2,8 +2,18 @@ source 'https://rubygems.org'
 
 gem 'rails', '3.2.2'
 
+#recaptcha
+gem 'recaptcha', :require => 'recaptcha/rails'
+
 #Postgresql
 gem 'pg'
+gem 'postgres_ext'
+
+#UUID
+gem 'uuid'
+
+#QR Codes
+gem 'rqrcode'
 
 #Login/authentication
 gem 'devise'
@@ -22,7 +32,7 @@ gem 'sidekiq'
 gem 'memcached'
 
 #Riak
-gem 'riak-client'
+gem 'ripple', '~> 1.0.0.beta2'
 
 #Social Media gems
 gem 'twitter-text'
