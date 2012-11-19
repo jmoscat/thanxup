@@ -15,4 +15,7 @@ class ThanxupController < ApplicationController
 
   def terms
   end
+
+  def unauthorized
+  end
 end

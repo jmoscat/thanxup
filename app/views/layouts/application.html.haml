@@ -18,7 +18,9 @@
                 = link_to 'Contact', contact_path
               - if current_owner
                 %li
-                  = link_to 'View Your Stores', root_path
+                  = link_to 'View Your Stores', owner_stores_path(owner_id: current_owner.id)
+                %li
+                  = link_to 'Add New Store', new_owner_store_path(owner_id: current_owner.id)
                 %li
                   = link_to 'Logout', destroy_owner_session_path, method: :delete
                 %li
