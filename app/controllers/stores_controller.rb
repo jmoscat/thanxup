@@ -14,8 +14,8 @@ class StoresController < ApplicationController
   end
 
   def create
-    store = Store.new(params[:store].merge(owner_id: current_owner.id))
-    if store.save
+    @store = Store.new(params[:store].merge(owner_id: current_owner.id))
+    if @store.save
       redirect_to owner_stores_path(owner_id: current_owner.id), notice: 'Successfully added a new store.'
     else
       render :new
@@ -37,6 +37,7 @@ class StoresController < ApplicationController
 
   def destroy
     @store = Store.find(params[:id])
+    @store.available_coupons.destroy_all if @store.available_coupons.present?
     @store.destroy
     redirect_to owner_stores_path(owner_id: current_owner.id), notice: 'Successfully removed store.'
   end

@@ -2,7 +2,7 @@ class CouponsController < ApplicationController
   before_filter :setup
 
   def index
-    @coupons = @store.coupons
+    @coupons = @store.available_coupons
   end
 
   def show
@@ -14,8 +14,8 @@ class CouponsController < ApplicationController
   end
 
   def create
-    coupon = Coupon.new(params[:coupon].merge(store_id: @store.key))
-    if coupon.save
+    @coupon = Coupon.new(params[:coupon].merge(store_id: @store.key))
+    if @coupon.save
       redirect_to owner_store_coupons_path(owner_id: current_owner.id, store_id: @store.key), notice: 'Successfully created a coupon.'
     else
       render :new

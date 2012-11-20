@@ -1,5 +1,3 @@
-require 'ripple'
-
 class Owner < ActiveRecord::Base
   after_create :send_owner_mail
 

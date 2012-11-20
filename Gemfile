@@ -9,9 +9,6 @@ gem 'recaptcha', :require => 'recaptcha/rails'
 gem 'pg'
 gem 'postgres_ext'
 
-#UUID
-gem 'uuid'
-
 #QR Codes
 gem 'rqrcode'
 
@@ -30,6 +27,9 @@ gem 'sidekiq'
 
 #Memcache
 gem 'memcached'
+
+#Calendar
+gem 'bootstrap-datepicker-rails'
 
 #Riak
 gem 'ripple', '~> 1.0.0.beta2'
