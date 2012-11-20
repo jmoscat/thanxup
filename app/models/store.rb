@@ -1,5 +1,3 @@
-require 'ripple'
-
 class Store
   include Ripple::Document
   property :name,                 String, presence: true
@@ -13,7 +11,6 @@ class Store
   property :qr_code,              String
   property :type,                 String, presence: true
   property :owner_id,             String, index: true
-  many :coupons
 
   def owner
     Owner.find(owner_id.to_i)
@@ -23,7 +20,7 @@ class Store
     self.owner_id = owner.id.to_s
   end
 
-  def coupons
+  def available_coupons
     Coupon.find_by_index('store_id', self.key)
   end
 end
