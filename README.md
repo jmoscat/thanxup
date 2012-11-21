@@ -25,7 +25,7 @@ To perform commands on riak, from terminal:
 riak-<version>/rel/riak/bin/riak <commands>
 ```
 
-You then need to edit the app.config file to allow search and secondary indexes from this gist https://gist.github.com/7d3729edef3ca6160a32:
+You then need to edit the app.config file to allow search and secondary indexes from this gist https://gist.github.com/7d3729edef3ca6160a32
 
 ```
 edit: riak-<version>/rel/riak/etc/app.config
@@ -44,6 +44,7 @@ Be sure you have qrencode:
 ```
 brew install qrencode
 ```
+http://nycrb.rubyforge.org/qrencoder/
 
 Now clone the repository, in terminal:
 
