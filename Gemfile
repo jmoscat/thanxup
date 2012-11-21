@@ -10,7 +10,7 @@ gem 'pg'
 gem 'postgres_ext'
 
 #QR Codes
-gem 'rqrcode'
+gem 'qrencoder'
 
 #Login/authentication
 gem 'devise'
