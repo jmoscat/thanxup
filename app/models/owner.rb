@@ -1,5 +1,18 @@
 class Owner < ActiveRecord::Base
+  PREFIXES = ["Mr.", "Miss", "Mrs.", "Ms."]
+  SUFFIXES = ["Jr.", "Sr.", "II", "III", "IV"]
+
+  has_attached_file :logo, :styles => { :medium => "300x300>", :thumb => "100x100>" }
+
+  attr_writer :area_code, :number1, :number2
+
+  before_save :create_phone_number
+
   after_create :send_owner_mail
+
+  validates :email, :password, :password_confirmation,
+    :first_name, :last_name, :company_name, :city, :state,
+    :phone_number, :prefix, :presence => true
 
   devise :database_authenticatable, :registerable,
          :rememberable, :trackable, :validatable,
@@ -7,8 +20,9 @@ class Owner < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation,
-    :remember_me, :approved, :name, :company_name, :city,
-    :state, :phone_number, :allow_phone_contact
+    :remember_me, :approved, :first_name, :company_name, :city,
+    :state, :phone_number, :allow_phone_contact, :logo, :last_name,
+    :suffix, :prefix
 
   def active_for_authentication?
     super && approved?
@@ -34,5 +48,11 @@ class Owner < ActiveRecord::Base
 
   def stores
     store = Store.find_by_index('owner_id', self.id.to_s)
+  end
+
+  private
+
+  def create_phone_number
+    self.phone_number = "#{area_code}-#{number1}-#{number2}"
   end
 end

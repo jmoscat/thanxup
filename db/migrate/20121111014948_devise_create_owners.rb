@@ -19,7 +19,10 @@ class DeviseCreateOwners < ActiveRecord::Migration
       t.string   :current_sign_in_ip
       t.string   :last_sign_in_ip
 
-      t.string :name
+      t.string :first_name
+      t.string :last_name
+      t.string :suffix
+      t.string :prefix
       t.string :company_name
       t.string :city
       t.string :state
@@ -27,6 +30,7 @@ class DeviseCreateOwners < ActiveRecord::Migration
       t.boolean :allow_phone_contact, default: false, null: false
       t.boolean :approved, default: false, null: false
       t.timestamps
+      t.attachment :logo #for paperclip gem
     end
 
     add_index :owners, :email,                unique: true
