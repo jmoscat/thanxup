@@ -9,6 +9,9 @@ gem 'recaptcha', :require => 'recaptcha/rails'
 gem 'pg'
 gem 'postgres_ext'
 
+#Upload Images
+gem 'paperclip'
+
 #QR Codes
 gem 'qrencoder'
 

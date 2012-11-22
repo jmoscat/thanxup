@@ -40,6 +40,11 @@ Be sure you have postgresql:
 brew install postgresql
 ```
 
+Be sure you have imagemagick for paperclick gem:
+```
+brew install imagemagick
+```
+
 Be sure you have qrencode:
 ```
 brew install qrencode

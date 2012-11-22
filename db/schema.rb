@@ -44,7 +44,10 @@ ActiveRecord::Schema.define(:version => 20121111182156) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.string   "name"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "suffix"
+    t.string   "prefix"
     t.string   "company_name"
     t.string   "city"
     t.string   "state"
@@ -53,6 +56,10 @@ ActiveRecord::Schema.define(:version => 20121111182156) do
     t.boolean  "approved",               :default => false, :null => false
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
+    t.string   "logo_file_name"
+    t.string   "logo_content_type"
+    t.integer  "logo_file_size"
+    t.datetime "logo_updated_at"
   end
 
   add_index "owners", ["email"], :name => "index_owners_on_email", :unique => true

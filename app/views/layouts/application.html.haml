@@ -30,7 +30,7 @@
                       %ul.dropdown-menu{:role => 'menu', 'aria-labelleby' => 'dLabel'}
                         - if store.available_coupons.present?
                           %li #{link_to "View #{store.name}'s Coupons", owner_store_coupons_path(owner_id: current_owner.id, store_id: store.key)}
-                        %li #{link_to "Add a Coupon for #{store.name}", new_owner_store_coupon_path(owner_id: current_owner.id, store_id: store.key)}
+                        %li #{link_to "Add a Coupon to #{store.name}", new_owner_store_coupon_path(owner_id: current_owner.id, store_id: store.key)}
                         %li.divider
 
                 %li

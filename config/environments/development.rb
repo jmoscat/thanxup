@@ -44,4 +44,6 @@ Thanxup::Application.configure do
     :password             => '1Keyword1',
     :authentication       => 'plain',
     :enable_starttls_auto => true  }
+
+  Paperclip.options[:command_path] = "/usr/local/bin/"
 end
