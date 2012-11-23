@@ -42,6 +42,10 @@ class StoresController < ApplicationController
     redirect_to owner_stores_path(owner_id: current_owner.id), notice: 'Successfully removed store.'
   end
 
+  def subregion_options
+    render partial: 'subregion_select'
+  end
+
   private
 
   def authorize

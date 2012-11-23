@@ -11,35 +11,65 @@
         .navbar-inner
           = link_to 'Thanxup', root_path, :class => 'brand'
           .nav-collapse.collapse
-            %ul.nav.pull-right
-              %li
-                = link_to 'About', about_path
-              %li
-                = link_to 'Contact', contact_path
+            %ul.nav.pull-left
               - if current_owner
+                %li.dropdown
+                  %a.dropdown-toggle{'data-toggle' => 'dropdown', :href => '#'}
+                    Stores
+                    %span.caret
+                  %ul.dropdown-menu{:role => 'menu', 'aria-labelleby' => 'dLabel'}
+                    - if current_owner.stores.present?
+                      %li #{link_to "View Your Stores", owner_stores_path(owner_id: current_owner.id)}
+                      %li.divider
+                    %li
+                      = link_to 'Add New Store', new_owner_store_path(owner_id: current_owner.id)
                 - if current_owner.stores.present?
-                  %li
-                    = link_to 'View Your Stores', owner_stores_path(owner_id: current_owner.id)
-                %li
-                  = link_to 'Add New Store', new_owner_store_path(owner_id: current_owner.id)
-                  - current_owner.stores.each do |store|
-                    %li.dropdown
-                      %a.dropdown-toggle{'data-toggle' => 'dropdown', :href => '#'}
-                        Coupons
-                        %span.caret
-                      %ul.dropdown-menu{:role => 'menu', 'aria-labelleby' => 'dLabel'}
+                  %li.dropdown
+                    %a.dropdown-toggle{'data-toggle' => 'dropdown', :href => '#'}
+                      Coupons
+                      %span.caret
+                    %ul.dropdown-menu{:role => 'menu', 'aria-labelleby' => 'dLabel'}
+                      - current_owner.stores.each do |store|
                         - if store.available_coupons.present?
                           %li #{link_to "View #{store.name}'s Coupons", owner_store_coupons_path(owner_id: current_owner.id, store_id: store.key)}
                         %li #{link_to "Add a Coupon to #{store.name}", new_owner_store_coupon_path(owner_id: current_owner.id, store_id: store.key)}
                         %li.divider
+              %li
+                = link_to 'About', about_path
+              %li
+                = link_to 'Contact', contact_path
 
+            %ul.nav.pull-right
+              - if current_owner
                 %li
                   = link_to 'Logout', destroy_owner_session_path, method: :delete
                 %li
-                  = link_to current_owner.name, owner_path(id: current_owner.id)
+                  - if current_owner.logo?
+                    = link_to(image_tag(current_owner.logo.url(:thumb), :class => 'logo img-rounded'), owner_path(id: current_owner.id), :class => 'owner_image', :title => "#{current_owner.name}")
+                  - else
+                    = link_to(current_owner.name, owner_path(id: current_owner.id))
+              - elsif current_admin
+                %li
+                  = link_to 'Owners', owner_approval_index_path
+                %li
+                  = link_to 'Logout', destroy_admin_session_path, method: :delete
               - else
                 %li
                   = link_to 'Signup for Thanxup', new_owner_registration_path
                 %li
                   = link_to 'Login', new_owner_session_path
   = yield
+
+  .container
+    %hr.featurette-divider
+
+    %footer
+      %p.pull-right
+        %a{:href => "#"} Back to top
+      %p
+        &copy; 2012 Thanxup, Inc. &middot;
+        = link_to 'Privacy', privacy_path
+        &middot;
+        = link_to 'Terms', terms_path
+        &middot;
+        = link_to 'Admin', new_admin_session_path

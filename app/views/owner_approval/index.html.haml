@@ -5,7 +5,7 @@
   |
   = link_to "Owners awaiting approval", :action => "index", :approved => "false"
 
-  %table
+  %table.table
     %tr
       %th Name
       %th Email
@@ -13,6 +13,7 @@
       %th City
       %th State
       %th Phone #
+      %th Toggle
       - @owners.each do |owner|
         %tr
           %td= owner.name

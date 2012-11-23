@@ -9,6 +9,9 @@ gem 'recaptcha', :require => 'recaptcha/rails'
 gem 'pg'
 gem 'postgres_ext'
 
+#Countries
+gem 'carmen-rails'
+
 #Upload Images
 gem 'paperclip'
 

@@ -3,3 +3,4 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 $(document).ready ->
   $(".carousel").carousel()
+  $('#area_code, #number1, #number2').autotab_magic().autotab_filter('numeric')
