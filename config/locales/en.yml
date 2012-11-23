@@ -3,3 +3,36 @@
 
 en:
   hello: "Hello world"
+  simple_form:
+    popovers:
+      store:
+        name:
+          title: "Store's Name"
+          text: "Give a unique name to your store for you to recognize."
+        description:
+          title: "Description"
+          text: "Give a small description of your store and what it's about."
+        country:
+          title: "Store's Country"
+          text: "Select the country the store is located at."
+        contact_email:
+          title: "Email"
+          text: "Give the email address of who to contact at this store location."
+        contact_phone_number:
+          title: "Phone Number"
+          text: "Give the phone number of who to contact at this store location."
+        type:
+          title: "Business Type"
+          text: "Give the type of business (restaurant, retailer, etc.)"
+        state:
+          title: "State"
+          text: "Select the state the store is located in (ex: California)."
+        city:
+          title: "City"
+          text: "Input the name of the city (ex: San Francisco)."
+        address:
+          title: "Address"
+          text: "Input the store's address (ex: 1234 Test Street)"
+        zip_code:
+          title: "Zip Code"
+          text: "Input the zip code of the store (ex: 12345)"

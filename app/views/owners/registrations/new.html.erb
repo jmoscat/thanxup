@@ -26,9 +26,9 @@
     <%= f.text_field :state %></div>
 
     <div><%= f.label :phone_number %>
-    <%= text_field_tag :area_code, nil, :maxlength => 3, :id => 'area_code' %>
-    <%= text_field_tag :number1, nil, :maxlength => 3, :id => 'number1' %>
-    <%= text_field_tag :number2, nil, :maxlength => 4, :id => 'number2' %></div>
+    <%= f.text_field :area_code, :maxlength => 3, :id => 'area_code' %>
+    <%= f.text_field :number1, :maxlength => 3, :id => 'number1' %>
+    <%= f.text_field :number2, :maxlength => 4, :id => 'number2' %></div>
 
     <div>Can we contact you by phone?<br />
     <%= f.check_box :allow_phone_contact %>
@@ -46,7 +46,7 @@
     <div><%= f.label :password_confirmation %>
     <%= f.password_field :password_confirmation %></div>
 
-    <div><%= f.submit "Sign up" %></div>
+    <div><%= f.submit "Sign up", :class => 'btn' %></div>
   <% end %>
 
   <%= render "devise/shared/links" %>

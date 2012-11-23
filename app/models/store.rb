@@ -1,6 +1,10 @@
 class Store
   include Ripple::Document
+  attr_accessor :area_code, :number1, :number2
+  before_validation :create_phone_number
+
   property :name,                 String, presence: true
+  property :description,          String, presence: true
   property :city,                 String, presence: true
   property :state,                String, presence: true
   property :country,              String, presence: true
@@ -22,5 +26,11 @@ class Store
 
   def available_coupons
     Coupon.find_by_index('store_id', self.key)
+  end
+
+  private
+
+  def create_phone_number
+    self.contact_phone_number = "#{self.area_code}-#{self.number1}-#{self.number2}"
   end
 end
