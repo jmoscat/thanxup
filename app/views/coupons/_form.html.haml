@@ -7,19 +7,34 @@
     = f.text_field :description
   %div
     = f.label :type
-    = f.select :type, options_for_select(Coupon::COUPON_TYPES)
-  %div
-    = f.label :start_date
-    = f.text_field :start_date, :class => 'datepicker'
-  %div
-    = f.label :end_date
-    = f.text_field :end_date, :class => 'datepicker'
-  %div
-    = f.label :money_off
-    = f.text_field :money_off
-  %div
-    = f.label :percent_off
-    = f.text_field :percent_off
+    = f.select :type, options_for_select(Coupon::COUPON_TYPES), :prompt => 'Select a Coupon Type', :id => 'coupon_type_select'
+  .hide#discount
+    = select_tag :discount, options_for_select(Coupon::DISCOUNT_TYPES), :prompt => 'Select the Discount Type', :id => 'discount_select_type'
+    .hide#money_off
+      %div
+        = f.label :money_off
+        = f.text_field :money_off
+    .hide#percent_off
+      %div
+        = f.label :percent_off
+        = f.text_field :percent_off
+  .hide#free
+  .hide#birthday
+  .hide#buy_get
+  .hide#first
+  .hide#coupon_life
+    = select_tag :type, options_for_select(Coupon::COUPON_LIFE), :prompt => 'Select the Coupon\'s Shelf Life'
+  .hide#expiration_date
+    %div
+      = f.label :start_date
+      = f.text_field :start_date, :class => 'datepicker'
+    %div
+      = f.label :end_date
+      = f.text_field :end_date, :class => 'datepicker'
+  .hide#expires_after
+    %div
+      = f.label :expires_after
+      = f.text_field :expires_after
   %div
     = f.label :enabled
     = f.check_box :enabled

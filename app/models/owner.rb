@@ -4,15 +4,16 @@ class Owner < ActiveRecord::Base
 
   has_attached_file :logo, :styles => { :medium => "300x300>", :thumb => "100x100>" }
 
-  attr_writer :area_code, :number1, :number2
+  attr_accessor :area_code, :number1, :number2
 
-  before_save :create_phone_number
+  before_validation :create_phone_number
 
   after_create :send_owner_mail
 
   validates :email, :password, :password_confirmation,
     :first_name, :last_name, :company_name, :city, :state,
-    :phone_number, :prefix, :presence => true
+    :phone_number, :prefix, :area_code, :number1,
+    :number2, :presence => true
 
   devise :database_authenticatable, :registerable,
          :rememberable, :trackable, :validatable,
@@ -22,7 +23,7 @@ class Owner < ActiveRecord::Base
   attr_accessible :email, :password, :password_confirmation,
     :remember_me, :approved, :first_name, :company_name, :city,
     :state, :phone_number, :allow_phone_contact, :logo, :last_name,
-    :suffix, :prefix
+    :suffix, :prefix, :area_code, :number1, :number2
 
   def active_for_authentication?
     super && approved?
@@ -50,9 +51,13 @@ class Owner < ActiveRecord::Base
     store = Store.find_by_index('owner_id', self.id.to_s)
   end
 
+  def name
+    "#{self.prefix} #{self.first_name} #{self.last_name}"
+  end
+
   private
 
   def create_phone_number
-    self.phone_number = "#{area_code}-#{number1}-#{number2}"
+    self.phone_number = "#{self.area_code}-#{self.number1}-#{self.number2}"
   end
 end
