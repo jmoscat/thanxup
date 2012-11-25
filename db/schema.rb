@@ -51,6 +51,9 @@ ActiveRecord::Schema.define(:version => 20121111182156) do
     t.string   "company_name"
     t.string   "city"
     t.string   "state"
+    t.string   "country"
+    t.string   "address"
+    t.string   "zip_code"
     t.string   "phone_number"
     t.boolean  "allow_phone_contact",    :default => false, :null => false
     t.boolean  "approved",               :default => false, :null => false

@@ -7,8 +7,10 @@
     = f.text_area :description, placeholder: 'Description'
   %div
     = popover(:store, :country)
-    = f.country_select :country, priority: %w(US ES CA), prompt: 'Please select a country'
-  = render partial: 'subregion_select', locals: {parent_region: f.object.country}
+    = f.country_select :country, {:priority => %w(US ES CA), :prompt => 'Please select a country'}, {:class => 'country_select', :data => f.object.class.name.underscore.to_s}
+
+  = render partial: '/layouts/subregion_select', locals: {parent_region: f.object.country, model: f.object.class.name.underscore.to_s}
+
   %div
     = popover(:store, :contact_email)
     = f.text_field :contact_email, placeholder: 'Email'

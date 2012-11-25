@@ -18,4 +18,8 @@ class ThanxupController < ApplicationController
 
   def unauthorized
   end
+
+  def subregion_options
+    render partial: '/layouts/subregion_select'
+  end
 end
