@@ -58,6 +58,10 @@
                   = link_to 'Signup for Thanxup', new_owner_registration_path
                 %li
                   = link_to 'Login', new_owner_session_path
+
+  .container
+    =render :partial => "layouts/messages", :locals => {:flash => flash}
+
   = yield
 
   .container

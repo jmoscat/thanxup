@@ -23,7 +23,8 @@ class Owner < ActiveRecord::Base
   attr_accessible :email, :password, :password_confirmation,
     :remember_me, :approved, :first_name, :company_name, :city,
     :state, :phone_number, :allow_phone_contact, :logo, :last_name,
-    :suffix, :prefix, :area_code, :number1, :number2
+    :suffix, :prefix, :area_code, :number1, :number2, :zip_code,
+    :address, :country
 
   def active_for_authentication?
     super && approved?

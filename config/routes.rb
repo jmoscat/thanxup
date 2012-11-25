@@ -1,7 +1,6 @@
 Thanxup::Application.routes.draw do
   devise_for :admins
   devise_for :owners
-  get '/stores/subregion_options' => 'stores#subregion_options'
   resources :owner_approval, :only => [ :index ]
   scope :path => '/thanxup', :controller => :thanxup do
     get :home
@@ -10,6 +9,7 @@ Thanxup::Application.routes.draw do
     get :unauthorized
     get :terms
     get :privacy
+    get :subregion_options
   end
   resources :owners, :except => [ :index, :new, :create, :destroy ] do
     scope :path => '/admins', :controller => :admins do

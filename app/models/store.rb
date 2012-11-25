@@ -2,6 +2,7 @@ class Store
   include Ripple::Document
   attr_accessor :area_code, :number1, :number2
   before_validation :create_phone_number
+  after_validation :check_if_exists
 
   property :name,                 String, presence: true
   property :description,          String, presence: true
@@ -32,5 +33,12 @@ class Store
 
   def create_phone_number
     self.contact_phone_number = "#{self.area_code}-#{self.number1}-#{self.number2}"
+  end
+
+  def check_if_exists
+    if Store.find_by_index('owner_id', self.owner_id).collect { |store| store.name }.include?(self.name)
+      self.errors.add(:name, 'already exists')
+      raise Ripple::DocumentInvalid, self
+    end
   end
 end
