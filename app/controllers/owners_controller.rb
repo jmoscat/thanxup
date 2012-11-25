@@ -1,6 +1,6 @@
 class OwnersController < ApplicationController
   load_and_authorize_resource except: [:index, :new, :create, :destroy]
-  before_filter :authorize_scope
+  before_filter :authorize
 
   def show
   end
@@ -13,7 +13,7 @@ class OwnersController < ApplicationController
 
   private
 
-  def authorize_scope
+  def authorize
     redirect_to unauthorized_path unless current_owner.id == params[:id].to_i || current_admin.present?
   end
 end
