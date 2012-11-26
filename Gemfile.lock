@@ -142,6 +142,7 @@ GEM
       mime-types
     pg (0.14.1)
     pg_array_parser (0.0.8)
+    phone (1.1)
     polyglot (0.3.3)
     postgres_ext (0.0.9)
       activerecord (~> 3.2.0)
@@ -291,6 +292,7 @@ DEPENDENCIES
   memcached
   paperclip
   pg
+  phone
   postgres_ext
   pry
   qrencoder

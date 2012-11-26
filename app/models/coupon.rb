@@ -3,18 +3,18 @@ class Coupon
 
   COUPON_TYPES = ['Discount', 'Free Giveaway', 'Buy-one get-one', 'First time customer', 'Birthday']
   DISCOUNT_TYPES = ['Money Off', 'Percent Off']
-  COUPON_LIFE = ['Absolute', 'Expiration Date', 'Expiration After']
+  COUPON_LIFE = ['Absolute', 'Expiration Date', 'Expiration After Obtaining']
 
-  property :title,        String
-  property :description,  String
-  property :type,         String
-  property :start_date,   Time
-  property :end_date,     Time
-  property :money_off,    Float
-  property :percent_off,  Integer
-  property :expires_after, Integer
-  property :enabled,      Boolean
-  property :store_id,     String,  index: true
+  property :title,           String
+  property :description,     String
+  property :type,            String
+  property :life_type,       String
+  property :expiration_date, Time
+  property :money_off,       Float
+  property :percent_off,     Integer
+  property :expires_after,   Integer
+  property :enabled,         Boolean
+  property :store_id,        String,  index: true
 
   def discount?
     self.type == 'Discount'

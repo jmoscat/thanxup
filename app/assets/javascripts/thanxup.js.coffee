@@ -3,7 +3,7 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 $ ->
   $(".carousel").carousel()
-  $('#area_code, #number1, #number2').autotab_magic().autotab_filter('numeric')
+  $('#country_code, #area_code, #number1, #number2, #extension').autotab_magic().autotab_filter('numeric')
 
   $('select.country_select').change (event) ->
     select_wrapper = $('#wrapper')
