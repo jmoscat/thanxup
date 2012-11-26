@@ -16,13 +16,17 @@
     = f.text_field :contact_email, placeholder: 'Email'
   %div
     = popover(:store, :contact_phone_number)
+    = f.text_field :country_code, :maxlength => 5, :id => 'country_code', :placeholder => '+CC'
+    #{"-"}
     = f.text_field :area_code, :maxlength => 3, :id => 'area_code', :placeholder => 'xxx'
     #{"-"}
     = f.text_field :number1, :maxlength => 3, :id => 'number1', :placeholder => 'xxx'
     #{"-"}
     = f.text_field :number2, :maxlength => 4, :id => 'number2', :placeholder => 'xxxx'
+    #{"-"}
+    = f.text_field :extension, :maxlength => 7, :id => 'extension', :placeholder => 'extension'
   %div
     = popover(:store, :type)
     = f.text_field :type, placeholder: 'Type of Business'
   %div
-    = f.submit 'Save Store', :class => 'btn'
+    = f.submit 'Save Store', class: 'btn'

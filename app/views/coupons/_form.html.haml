@@ -1,42 +1,31 @@
 = form_for [current_owner, @store, @coupon] do |f|
   %div
-    = f.label :title
-    = f.text_field :title
+    = f.text_field :title, placeholder: 'Coupon heading'
   %div
-    = f.label :description
-    = f.text_field :description
+    = f.text_area :description, placeholder: 'Describe the coupon'
   %div
-    = f.label :type
-    = f.select :type, options_for_select(Coupon::COUPON_TYPES), :prompt => 'Select a Coupon Type', :id => 'coupon_type_select'
+    = f.select :type, options_for_select(Coupon::COUPON_TYPES), prompt: 'Select a Coupon Type', id: 'coupon_type_select'
   .hide#discount
-    = select_tag :discount, options_for_select(Coupon::DISCOUNT_TYPES), :prompt => 'Select the Discount Type', :id => 'discount_select_type'
+    = select_tag :discount, options_for_select(Coupon::DISCOUNT_TYPES), prompt: 'Select the Discount Type', id: 'discount_select_type'
     .hide#money_off
-      %div
-        = f.label :money_off
-        = f.text_field :money_off
+      = f.text_field :money_off, placeholder: 'Money Off'
     .hide#percent_off
-      %div
-        = f.label :percent_off
-        = f.text_field :percent_off
+      = f.text_field :percent_off, placeholder: 'Percent Off'
   .hide#free
   .hide#birthday
+    %p
+      %span.label.label-important The birthday coupon is a coupon that all users have the option to receive on their birthday.
   .hide#buy_get
   .hide#first
-  .hide#coupon_life
-    = select_tag :type, options_for_select(Coupon::COUPON_LIFE), :prompt => 'Select the Coupon\'s Shelf Life'
-  .hide#expiration_date
-    %div
-      = f.label :start_date
-      = f.text_field :start_date, :class => 'datepicker'
-    %div
-      = f.label :end_date
-      = f.text_field :end_date, :class => 'datepicker'
-  .hide#expires_after
-    %div
-      = f.label :expires_after
-      = f.text_field :expires_after
+  #coupon_life
+    = f.select :life_type, options_for_select(Coupon::COUPON_LIFE), prompt: 'Select Shelf Life', id: 'coupon_life_type'
+    .hide#absolute
+      %p
+        %span.label.label-info You will be adding a coupon that has no expiration date. You will be able to disable or destroy the coupon on the edit page if desired.
+    .hide#expiration_date
+      = f.text_field :expiration_date, class: 'datepicker', placeholder: 'Expiration Date'
+    .hide#expires_after
+      = f.number_field :expires_after, placeholder: 'Expires After'
+      = "days"
   %div
-    = f.label :enabled
-    = f.check_box :enabled
-  %div
-    = f.submit
+    = f.submit 'Save Coupon', class: 'btn'

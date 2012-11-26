@@ -45,7 +45,7 @@
                   = link_to 'Logout', destroy_owner_session_path, method: :delete
                 %li
                   - if current_owner.logo?
-                    = link_to(image_tag(current_owner.logo.url(:thumb), :class => 'logo img-rounded'), owner_path(id: current_owner.id), :class => 'owner_image', :title => "#{current_owner.name}")
+                    = link_to(image_tag(current_owner.logo.url(:avatar), :class => 'logo img-rounded'), owner_path(id: current_owner.id), :class => 'owner_image', :title => "#{current_owner.name}")
                   - else
                     = link_to(current_owner.name, owner_path(id: current_owner.id))
               - elsif current_admin
@@ -59,8 +59,9 @@
                 %li
                   = link_to 'Login', new_owner_session_path
 
-  .container
-    =render :partial => "layouts/messages", :locals => {:flash => flash}
+  - if flash.present?
+    .container
+      =render :partial => "layouts/messages", :locals => {:flash => flash}
 
   = yield
 
