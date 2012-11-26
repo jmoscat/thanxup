@@ -20,7 +20,7 @@ en:
           text: "Give the email address of who to contact at this store location."
         contact_phone_number:
           title: "Phone Number"
-          text: "Give the phone number of who to contact at this store location."
+          text: "Give the phone number of who to contact at this store location. Leave the country code and extension blank if they don't apply."
         type:
           title: "Business Type"
           text: "Give the type of business (restaurant, retailer, etc.)"

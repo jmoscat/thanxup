@@ -1,8 +1,10 @@
 class Store
   include Ripple::Document
-  attr_accessor :area_code, :number1, :number2
+  attr_accessor :country_code, :area_code, :number1, :number2, :extension
   before_validation :create_phone_number
   after_validation :check_if_exists
+
+  DEFAULT_COUNTRY_CODE = '1'
 
   property :name,                 String, presence: true
   property :description,          String, presence: true
@@ -32,7 +34,15 @@ class Store
   private
 
   def create_phone_number
-    self.contact_phone_number = "#{self.area_code}-#{self.number1}-#{self.number2}"
+    self.country_code = self.country_code.blank? ? DEFAULT_COUNTRY_CODE : self.country_code
+    self.contact_phone_number = Phoner::Phone.new(number: "#{self.number1}#{self.number2}",
+                                                  area_code: "#{self.area_code}",
+                                                  country_code: "#{self.country_code}",
+                                                  extension: "#{self.extension}").format("+ %c (%a)-%f-%l %x")
+    unless Phoner::Phone.valid? self.contact_phone_number
+      self.errors.add(:contact_phone_number, 'invalid phone number')
+      raise Ripple::DocumentInvalid, self
+    end
   end
 
   def check_if_exists

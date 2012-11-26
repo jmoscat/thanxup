@@ -24,10 +24,14 @@
 
     <%= render partial: '/layouts/subregion_select', locals: {parent_region: f.object.country, model: f.object.class.name.underscore.to_s} %>
 
-    <div><%= f.label :phone_number %>
-    <%= f.text_field :area_code, :maxlength => 3, :id => 'area_code' %>
-    <%= f.text_field :number1, :maxlength => 3, :id => 'number1' %>
-    <%= f.text_field :number2, :maxlength => 4, :id => 'number2' %></div>
+    <div>
+      <%= popover(:owner, :contact_phone_number) %>
+      <%= f.text_field :country_code, :maxlength => 5, :id => 'country_code', :placeholder => '+CC' %>-
+      <%= f.text_field :area_code, :maxlength => 3, :id => 'area_code', :placeholder => 'xxx'%>-
+      <%= f.text_field :number1, :maxlength => 3, :id => 'number1', :placeholder => 'xxx' %>-
+      <%= f.text_field :number2, :maxlength => 4, :id => 'number2', :placeholder => 'xxxx' %>-
+      <%= f.text_field :extension, :maxlength => 7, :id => 'extension', :placeholder => 'extension' %>
+    </div>
 
     <div>Can we contact you by phone?<br />
     <%= f.check_box :allow_phone_contact %>

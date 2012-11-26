@@ -1,10 +1,11 @@
 class Owner < ActiveRecord::Base
   PREFIXES = ["Mr.", "Miss", "Mrs.", "Ms."]
   SUFFIXES = ["Jr.", "Sr.", "II", "III", "IV"]
+  DEFAULT_COUNTRY_CODE = '1'
 
-  has_attached_file :logo, :styles => { :medium => "300x300>", :thumb => "100x100>" }
+  has_attached_file :logo, :styles => { medium: "300x300>", thumb: "100x100>", avatar: "105x50" }
 
-  attr_accessor :area_code, :number1, :number2
+  attr_accessor :country_code, :area_code, :number1, :number2, :extension
 
   before_validation :create_phone_number
 
@@ -24,7 +25,7 @@ class Owner < ActiveRecord::Base
     :remember_me, :approved, :first_name, :company_name, :city,
     :state, :phone_number, :allow_phone_contact, :logo, :last_name,
     :suffix, :prefix, :area_code, :number1, :number2, :zip_code,
-    :address, :country
+    :address, :country, :extension, :country_code
 
   def active_for_authentication?
     super && approved?
@@ -59,6 +60,13 @@ class Owner < ActiveRecord::Base
   private
 
   def create_phone_number
-    self.phone_number = "#{self.area_code}-#{self.number1}-#{self.number2}"
+    self.country_code = self.country_code.blank? ? DEFAULT_COUNTRY_CODE : self.country_code
+    self.phone_number = Phoner::Phone.new(number: "#{self.number1}#{self.number2}",
+                                                  area_code: "#{self.area_code}",
+                                                  country_code: "#{self.country_code}",
+                                                  extension: "#{self.extension}").format("+ %c (%a)-%f-%l %x")
+    unless Phoner::Phone.valid? self.phone_number
+      self.errors.add(:phone_number, 'invalid phone number')
+    end
   end
 end

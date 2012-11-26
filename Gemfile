@@ -15,6 +15,9 @@ gem 'carmen-rails'
 #Upload Images
 gem 'paperclip'
 
+#parse phone and validate
+gem 'phone'
+
 #QR Codes
 gem 'qrencoder'
 
