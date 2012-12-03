@@ -15,6 +15,9 @@ gem 'carmen-rails'
 #Upload Images
 gem 'paperclip'
 
+#Handling currency
+gem 'money-rails'
+
 #parse phone and validate
 gem 'phone'
 
