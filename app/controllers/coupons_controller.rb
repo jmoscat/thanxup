@@ -1,5 +1,6 @@
 class CouponsController < ApplicationController
   before_filter :setup
+  rescue_from Ripple::DocumentInvalid, :with => :invalid_coupon
 
   def index
     @coupons = @store.available_coupons
@@ -39,6 +40,17 @@ class CouponsController < ApplicationController
     @coupon = Coupon.find(params[:id])
     @coupon.destroy
     redirect_to owner_store_coupons_path(owner_id: current_owner.id, store_id: @store.key), notice: 'Successfully removed coupon.'
+  end
+
+  protected
+
+  def invalid_coupon
+    @coupon ||= Coupon.new
+    if params[:action] == 'create'
+      render :new
+    else
+      render :edit
+    end
   end
 
   private
