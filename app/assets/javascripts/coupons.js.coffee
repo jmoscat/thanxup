@@ -29,12 +29,12 @@ $ ->
       removeActive($(this))
       $('#birthday').addClass('active')
       $('#birthday').slideDown('fast')
-      $("#coupon_life_type option[value='Expiration Date']").prop('disabled', true)
       if $('#coupon_life_type').val() == 'Expiration Date'
         removeActiveLife($('#coupon_life_type'))
         $("#coupon_life_type option[value='Expiration Date']").prop('disabled', true)
         $("#coupon_life_type").val('')
-  $('#discount_select_type').change ->
+      $("#coupon_life_type option[value='Expiration Date']").prop('disabled', true)
+  $('#coupon_discount_desc').change ->
     if $(this).val() == ""
       hideActiveDiscount()
     else if $(this).val() == "Money Off"
@@ -64,7 +64,7 @@ $ ->
       removeActiveLife($(this))
       $('#expires_after').addClass('active_life')
       $('#expires_after').slideDown('fast')
-  $('#get_one_type').change ->
+  $('#coupon_get_one_type').change ->
     if $(this).val() == ""
       hideActiveDiscount()
     else if $(this).val() == "Money Off"
