@@ -1,27 +1,25 @@
 .container
-  %h4 Store: #{@store.name} located at #{@store.address} #{@store.city}, #{@store.state} #{@store.zip_code} #{@store.country}
+  %h4 #{@store.name} located at #{@store.address} #{@store.city}, #{@store.state} #{@store.zip_code} #{@store.country}
   - if @coupons.present?
     %table.table.table-bordered
       %tr
         %th Title
         %th Description
         %th Type
-        %th State Date
-        %th End Date
+        %th Discount Type
         %th Money Off
         %th Percent Off
-        %th Enabled?
+        %th Coupon Shelf Life
         %th &nbsp;
       - for coupon in @coupons
         %tr
           %td= coupon.title
           %td= coupon.description
           %td= coupon.type
-          %td= coupon.start_date
-          %td= coupon.end_date
+          %td= coupon.discount_desc
           %td= coupon.money_off
           %td= coupon.percent_off
-          %td= coupon.enabled
+          %td= coupon.life_type
           %td
             .btn-group
               %button.btn Action

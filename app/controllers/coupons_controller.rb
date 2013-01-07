@@ -15,7 +15,9 @@ class CouponsController < ApplicationController
   end
 
   def create
-    @coupon = Coupon.new(params[:coupon].merge(store_id: @store.key))
+    @coupon = Coupon.new(params[:coupon]) do |coupon|
+      coupon.store_id = @store.key
+    end
     if @coupon.save
       redirect_to owner_store_coupons_path(owner_id: current_owner.id, store_id: @store.key), notice: 'Successfully created a coupon.'
     else
