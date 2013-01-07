@@ -1,32 +1,76 @@
+%div
+  - if @coupon.errors.present?
+    %ul
+      - @coupon.errors.each do |k,v|
+        %li
+          %h5 #{column_to_proper_desc(k)}: #{v}
 = form_for [current_owner, @store, @coupon] do |f|
   %div
     = f.text_field :title, placeholder: 'Coupon heading'
   %div
     = f.text_area :description, placeholder: 'Describe the coupon'
   %div
-    = f.select :type, options_for_select(Coupon::COUPON_TYPES), prompt: 'Select a Coupon Type', id: 'coupon_type_select'
-  .hide#discount
-    = select_tag :discount_desc, options_for_select(Coupon::DISCOUNT_TYPES), prompt: 'Select the Discount Type', id: 'discount_select_type'
-    .hide#money_off
-      = f.number_field :money_off, placeholder: 'Money Off', min: 1
-      = "$"
-    .hide#percent_off
-      = f.number_field :percent_off, placeholder: 'Percent Off', min: 1
-      = "%"
+    = f.select :type, options_for_select(Coupon::COUPON_TYPES, @coupon.type), prompt: 'Select a Coupon Type', id: 'coupon_type_select'
+  - if @coupon.discount_desc.present? || @coupon.errors[:discount_desc].present?
+    .active#discount
+      = f.select :discount_desc, options_for_select(Coupon::DISCOUNT_TYPES, @coupon.discount_desc), prompt: 'Select the Discount Type'
+      - if @coupon.money_off.present? || @coupon.errors[:money_off].present?
+        .active_discount#money_off
+          = f.number_field :money_off, placeholder: 'Money Off $', min: 1
+      - else
+        .hide#money_off
+          = f.number_field :money_off, placeholder: 'Money Off $', min: 1
+      - if @coupon.percent_off.present? || @coupon.errors[:percent_off].present?
+        .active_discount#percent_off
+          = f.number_field :percent_off, placeholder: 'Percent Off %', min: 1
+      - else
+        .hide#percent_off
+          = f.number_field :percent_off, placeholder: 'Percent Off %', min: 1
+  - else
+    .hide#discount
+      = f.select :discount_desc, options_for_select(Coupon::DISCOUNT_TYPES, @coupon.discount_desc), prompt: 'Select the Discount Type'
+      .hide#money_off
+        = f.number_field :money_off, placeholder: 'Money Off $', min: 1
+        = "$"
+      .hide#percent_off
+        = f.number_field :percent_off, placeholder: 'Percent Off $', min: 1
+        = "%"
   .hide#free
     %p
       %span.label.label-info You are adding a coupon that is a free giveaway. Use the heading and description above to clarify what is being given free.
   .hide#birthday
     %p
       %span.label.label-info The birthday coupon will be offered to any user's on their birthday. Select the shelf life of the coupon after it's received on their birthday.
-  .hide#buy_get
-    = select_tag :get_one_type, options_for_select(Coupon::GET_ONE_TYPES), prompt: 'Get one...', id: 'get_one_type'
-    .hide#get_one_money
-      = f.number_field :get_money_off, placeholder: 'Money Off', min: 1
-      = "$"
-    .hide#get_one_percent
-      = f.number_field :get_percent_off, placeholder: 'Percent Off', min: 1
-      = "%"
+  - if @coupon.get_one_type.present? || @coupon.errors[:get_one_type].present?
+    .active#buy_get
+      = f.select :get_one_type, options_for_select(Coupon::GET_ONE_TYPES, @coupon.get_one_type), prompt: 'Get one...'
+    - if @coupon.get_money_off.present? || @coupon.errors[:get_money_off].present?
+      .active_discount#get_one_money
+        = f.number_field :get_money_off, placeholder: 'Money Off $', min: 1
+    - else
+      .hide#get_one_money
+        = f.number_field :get_money_off, placeholder: 'Money Off $', min: 1
+    - if @coupon.get_percent_off.present? || @coupon.errors[:get_percent_off].present?
+      .active_discount#get_one_percent
+        = f.number_field :get_percent_off, placeholder: 'Percent Off %', min: 1
+    - else
+      .hide#get_one_percent
+        = f.number_field :get_percent_off, placeholder: 'Percent Off %', min: 1
+  - else
+    .hide#buy_get
+      = f.select :get_one_type, options_for_select(Coupon::GET_ONE_TYPES), prompt: 'Get one...'
+    - if @coupon.get_money_off.present? || @coupon.errors[:get_money_off].present?
+      .active_discount#get_one_money
+        = f.number_field :get_money_off, placeholder: 'Money Off $', min: 1
+    - else
+      .hide#get_one_money
+        = f.number_field :get_money_off, placeholder: 'Money Off $', min: 1
+    - if @coupon.get_percent_off.present? || @coupon.errors[:get_percent_off].present?
+      .active_discount#get_one_percent
+        = f.number_field :get_percent_off, placeholder: 'Percent Off %', min: 1
+    - else
+      .hide#get_one_percent
+        = f.number_field :get_percent_off, placeholder: 'Percent Off %', min: 1
     .hide#get_free
       %p
         %span.label.label-info You will be adding a coupon that is a buy one get one free, you are responsible for upholding this coupon. Use the heading and description above to give clarification.
@@ -37,16 +81,30 @@
     %p
       %span.label.label-info This coupon will allow us to market your business to your customers who have never been to your establishment through email and social media. Use the heading and description above to give clarification.
   #coupon_life
-    = f.select :life_type, options_for_select(Coupon::COUPON_LIFE), prompt: 'Select Shelf Life', id: 'coupon_life_type'
-    .hide#absolute
-      %p
-        %span.label.label-info You will be adding a coupon that has no expiration date. You will be able to disable or destroy the coupon on the edit page if desired.
-    .hide#expiration_date
-      = f.text_field :expiration_date, class: 'datepicker', placeholder: 'Expiration Date'
-      %p
-        %span.label.label-info When adding a coupon with an expiration be aware of when you are thinking about starting a campaign. You won't be able to add a coupon that is expired to your campaign.
-    .hide#expires_after
-      = f.number_field :expires_after, placeholder: 'Expires After', min: 7
-      = "days"
+    = f.select :life_type, options_for_select(Coupon::COUPON_LIFE, @coupon.life_type), prompt: 'Select Shelf Life', id: 'coupon_life_type'
+    - if @coupon.life_type.present? && @coupon.life_type == 'Absolute'
+      .active_life#absolute
+        %p
+          %span.label.label-info You will be adding a coupon that has no expiration date. You will be able to disable or destroy the coupon on the edit page if desired.
+    - else
+      .hide#absolute
+        %p
+          %span.label.label-info You will be adding a coupon that has no expiration date. You will be able to disable or destroy the coupon on the edit page if desired.
+    - if @coupon.expiration_date.present? || @coupon.errors[:expiration_date].present?
+      .active_life#expiration_date
+        = f.text_field :expiration_date, class: 'datepicker', placeholder: 'Expiration Date'
+        %p
+          %span.label.label-info When adding a coupon with an expiration be aware of when you are thinking about starting a campaign. You won't be able to add a coupon that is expired to your campaign.
+    - else
+      .hide#expiration_date
+        = f.text_field :expiration_date, class: 'datepicker', placeholder: 'Expiration Date'
+        %p
+          %span.label.label-info When adding a coupon with an expiration be aware of when you are thinking about starting a campaign. You won't be able to add a coupon that is expired to your campaign.
+    - if @coupon.expires_after.present? || @coupon.errors[:expires_after].present?
+      .active_life#expires_after
+        = f.number_field :expires_after, placeholder: 'Expires After (in days)', min: 7
+    - else
+      .hide#expires_after
+        = f.number_field :expires_after, placeholder: 'Expires After (in days)', min: 7
   %div
     = f.submit 'Save Coupon', class: 'btn'
