@@ -50,7 +50,11 @@ class Owner < ActiveRecord::Base
   end
 
   def stores
-    store = Store.find_by_index('owner_id', self.id.to_s)
+    Store.find_by_index('owner_id', self.id.to_s)
+  end
+
+  def campaigns
+    Campaign.find_by_index('owner_id', self.id.to_s)
   end
 
   def name
