@@ -1,9 +1,0 @@
-+K true
-+A 64
--smp enable
-+W w
--env ERL_MAX_PORTS 4096
--env ERL_FULLSWEEP_AFTER 0
--env ERL_CRASH_DUMP /Users/cnixon/thanxup/db/development/4/log/erl_crash.dump
--name riak792329@127.0.0.1
--setcookie 9890_604538
