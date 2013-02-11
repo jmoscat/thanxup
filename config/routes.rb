@@ -18,8 +18,10 @@ Thanxup::Application.routes.draw do
     resources :stores do
       resources :coupons
     end
-    resources :campaigns, :except => [:show] do
-      delete :deactivate
+    resources :campaigns, :except => [:show, :destroy] do
+      member do
+        delete :deactivate
+      end
     end
   end
   root :to => 'thanxup#home'

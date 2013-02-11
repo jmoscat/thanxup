@@ -1,4 +1,6 @@
-module Ripple #module to extend functionality to ripple gem (ORM)
+module RippleExtensions
+  extend Ripple::Document
+
   def raise_error!
     raise Ripple::DocumentInvalid, self
   end

@@ -54,7 +54,7 @@ class Owner < ActiveRecord::Base
   end
 
   def campaigns
-    Campaign.find_by_index('owner_id', self.id.to_s)
+    Campaign.find_by_index('owner_id', self.id.to_s).reject { |campaign| campaign.inactive? }
   end
 
   def name

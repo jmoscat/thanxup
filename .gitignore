@@ -2,3 +2,4 @@ log/
 tmp/
 .DS_STORE
 db/development/
+config/unicorn.rb
