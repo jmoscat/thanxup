@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.2'
+gem 'rails'
 
 #recaptcha
 gem 'recaptcha', :require => 'recaptcha/rails'
@@ -28,9 +28,6 @@ gem 'qrencoder'
 gem 'devise'
 gem 'cancan'
 
-#Web server
-gem 'unicorn'
-
 #Managing credit card/payments
 gem 'stripe'
 
@@ -42,6 +39,7 @@ gem 'memcached'
 
 #Calendar
 gem 'bootstrap-datepicker-rails'
+gem 'bootstrap-timepicker-rails'
 
 #Riak
 gem 'ripple', '~> 1.0.0.beta2'
@@ -55,11 +53,13 @@ gem 'koala' #facebook
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sass-rails',   '~> 3.2.3'
+  gem 'sass-rails'
   gem 'haml-rails'
-  gem 'coffee-rails', '~> 3.2.1'
+  gem 'coffee-rails'
   gem 'twitter-bootstrap-rails'
-  gem 'uglifier', '>= 1.0.3'
+  gem 'uglifier'
+  gem 'less-rails'
+  gem 'therubyracer'
 end
 
 gem 'jquery-rails'
@@ -72,4 +72,5 @@ group :test, :development do
   gem 'factory_girl'
   gem 'factory_girl_rails'
   gem 'pry'
+  gem 'unicorn'
 end

@@ -1,0 +1,33 @@
+%div
+  - if @campaign.errors.present?
+    %ul
+      - @campaign.errors.each do |k,v|
+        %li
+          - if k == :base
+            %h4.text-error= v
+          - else
+            %h4.text-error #{campaign_column_to_proper_desc(k)}: #{v}
+= form_for [current_owner, @campaign] do |f|
+  %div
+    = f.text_field :name, placeholder: 'Name'
+  %div
+    = f.text_area :description, placeholder: 'Description'
+  %div
+    = f.text_field :start_date, class: 'datepicker', placeholder: 'Start Date', value: @campaign.start_date.try(:strftime, ("%Y-%m-%d"))
+  %div
+    .input-append.bootstrap-timepicker-component
+      = f.text_field :start_time, class: 'timepicker dateselect-time input-small', placeholder: 'End Time'
+      %span.add-on
+        %i.icon-time
+  %div
+    = f.text_field :end_date, class: 'datepicker', placeholder: 'End Date', value: @campaign.end_date.try(:strftime, ("%Y-%m-%d"))
+  %div
+    .input-append.bootstrap-timepicker-component
+      = f.text_field :end_time, class: 'timepicker dateselect-time input-small', placeholder: 'End Time'
+      %span.add-on
+        %i.icon-time
+  %div.text-info Select the stores that you want to run campaign for
+  %div
+    = f.select :campaign_stores, options_from_collection_for_select(@stores, 'key', 'name', @campaign.try(:campaign_stores).collect { |store| store.store_id }), { }, { multiple: true }
+  %div
+    = f.submit 'Save Campaign', class: 'btn'

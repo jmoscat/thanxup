@@ -1,0 +1,1 @@
+require 'ripple_extensions'
