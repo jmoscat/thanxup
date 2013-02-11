@@ -23,6 +23,16 @@
                       %li.divider
                     %li
                       = link_to 'Add New Store', new_owner_store_path(owner_id: current_owner.id)
+                %li.dropdown
+                  %a.dropdown-toggle{'data-toggle' => 'dropdown', :href => '#'}
+                    Campaigns
+                    %span.caret
+                  %ul.dropdown-menu{:role => 'menu', 'aria-labelleby' => 'dLabel'}
+                    - if current_owner.campaigns.present?
+                      %li #{link_to "View Your Campaigns", owner_campaigns_path(owner_id: current_owner.id)}
+                      %li.divider
+                    %li
+                      = link_to 'Add New Campaign', new_owner_campaign_path(owner_id: current_owner.id)
                 - if current_owner.stores.present?
                   %li.dropdown
                     %a.dropdown-toggle{'data-toggle' => 'dropdown', :href => '#'}

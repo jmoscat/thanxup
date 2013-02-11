@@ -40,15 +40,13 @@ class Store
                                                   country_code: "#{self.country_code}",
                                                   extension: "#{self.extension}").format("+ %c (%a)-%f-%l %x")
     unless Phoner::Phone.valid? self.contact_phone_number
-      self.errors.add(:contact_phone_number, 'invalid phone number')
-      raise Ripple::DocumentInvalid, self
+      self.errors.add(:contact_phone_number, 'invalid phone number') and raise_error!
     end
   end
 
   def check_if_exists
     if Store.find_by_index('owner_id', self.owner_id).collect { |store| store.name }.include?(self.name)
-      self.errors.add(:name, 'already exists')
-      raise Ripple::DocumentInvalid, self
+      self.errors.add(:name, 'already exists') and raise_error!
     end
   end
 end

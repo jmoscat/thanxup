@@ -15,7 +15,9 @@ class StoresController < ApplicationController
   end
 
   def create
-    @store = current_owner.stores.build(params[:store])
+    @store = Store.new(params[:store]) do |store|
+      store.owner_id = current_owner.id
+    end
     if @store.save!
       redirect_to owner_stores_path(owner_id: current_owner.id), notice: 'Successfully added a new store.'
     else

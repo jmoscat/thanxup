@@ -6,6 +6,7 @@ $ ->
     format: "yyyy-mm-dd"
     weekStart: 1
     autoclose: true
+  $('.timepicker').timepicker()
   $('#coupon_type').change ->
     if $(this).val() == ""
       removeActive($(this))

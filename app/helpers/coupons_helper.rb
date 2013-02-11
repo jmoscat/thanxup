@@ -1,5 +1,5 @@
 module CouponsHelper
-  def column_to_proper_desc(col)
+  def coupon_column_to_proper_desc(col)
     case col
       when :title
         'Input a heading for your coupon that draws the user\'s attention'
