@@ -5,6 +5,8 @@
     - else
       .modal-header
         %h3 Setup Credit Card
+        - unless current_owner.last_4_digits.nil?
+          %h5 Currently using card ending with #{current_owner.last_4_digits} - #{link_to "Cancel Subscription", cancel_payment_owner_path(id: current_owner.id), method: :delete} - #{link_to "Delete Stripe Information", remove_stripe_info_owner_path(id: current_owner.id), method: :delete}
       .modal-body
         .field
           = label_tag :card_number, "Credit Card Number"

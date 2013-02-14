@@ -6,13 +6,14 @@ class Owner < ActiveRecord::Base
   has_attached_file :logo, :styles => { medium: "300x300>", thumb: "100x100>", avatar: "105x50" }
 
   before_validation :create_phone_number, on: :create
-  before_save :update_stripe
+  before_save :update_stripe, :unless => proc { |obj| obj.validations_to_skip.present? and obj.validations_to_skip.include?('stripe') }
   before_destroy :cancel_subscription
   after_create :send_owner_mail
 
-  validates :email, :password, :password_confirmation,
-    :first_name, :last_name, :company_name, :city, :state,
+  validates :email, :first_name, :last_name, :company_name, :city, :state,
     :phone_number, :prefix, presence: true
+
+  validates :password, :password_confirmation, presence: true, if: :password
 
   devise :database_authenticatable, :registerable,
          :rememberable, :trackable, :validatable,
@@ -24,10 +25,10 @@ class Owner < ActiveRecord::Base
     :state, :phone_number, :allow_phone_contact, :logo, :last_name,
     :suffix, :prefix, :area_code, :number1, :number2, :zip_code,
     :address, :country, :extension, :country_code, :stripe_token,
-    :coupon, :customer_id
+    :coupon, :customer_id, :last_4_digits
 
   attr_accessor :country_code, :area_code, :number1,
-    :number2, :extension, :stripe_token, :coupon
+    :number2, :extension, :stripe_token, :coupon, :validations_to_skip
 
   def active_for_authentication?
     super && approved?
@@ -92,13 +93,13 @@ class Owner < ActiveRecord::Base
       end
       customer.email = self.email
       customer.description = self.company_name
+      customer.plan = 'thanxup'
       customer.save
     end
     self.last_4_digits = customer.active_card.last4
     self.customer_id = customer.id
     self.stripe_token = nil
   rescue Stripe::StripeError => e
-    logger.error "Stripe Error: " + e.message
     errors.add :base, "#{e.message}."
     self.stripe_token = nil
     false
@@ -107,18 +108,35 @@ class Owner < ActiveRecord::Base
   def cancel_subscription
     unless customer_id.nil?
       customer = Stripe::Customer.retrieve(customer_id)
-      unless customer.nil? or customer.respond_to?('deleted')
-        if customer.subscription.status == 'active'
+      unless customer.nil? or customer.respond_to?('deleted') or customer.subscription.blank?
+        if customer.subscription.try(:status) =~ /(active|trialing)/
           customer.cancel_subscription
         end
       end
     end
   rescue Stripe::StripeError => e
-    logger.error "Stripe Error: " + e.message
     errors.add :base, "Unable to cancel your subscription. #{e.message}."
     false
   end
 
+  def remove_stripe_info
+    unless customer_id.nil?
+      customer = Stripe::Customer.retrieve(customer_id)
+      customer.delete
+      self.clear_stripe_info!
+    end
+  rescue Stripe::StripeError => e
+    errors.add :base, "Unable to remove your account. #{e.message}."
+    false
+  end
+
+  def clear_stripe_info!
+    self.last_4_digits       = nil
+    self.stripe_token        = nil
+    self.customer_id         = nil
+    self.validations_to_skip = ["stripe"]
+    self.save!
+  end
 
   private
 
