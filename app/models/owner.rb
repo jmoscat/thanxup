@@ -5,16 +5,14 @@ class Owner < ActiveRecord::Base
 
   has_attached_file :logo, :styles => { medium: "300x300>", thumb: "100x100>", avatar: "105x50" }
 
-  attr_accessor :country_code, :area_code, :number1, :number2, :extension
-
-  before_validation :create_phone_number
-
+  before_validation :create_phone_number, on: :create
+  before_save :update_stripe
+  before_destroy :cancel_subscription
   after_create :send_owner_mail
 
   validates :email, :password, :password_confirmation,
     :first_name, :last_name, :company_name, :city, :state,
-    :phone_number, :prefix, :area_code, :number1,
-    :number2, :presence => true
+    :phone_number, :prefix, presence: true
 
   devise :database_authenticatable, :registerable,
          :rememberable, :trackable, :validatable,
@@ -25,7 +23,11 @@ class Owner < ActiveRecord::Base
     :remember_me, :approved, :first_name, :company_name, :city,
     :state, :phone_number, :allow_phone_contact, :logo, :last_name,
     :suffix, :prefix, :area_code, :number1, :number2, :zip_code,
-    :address, :country, :extension, :country_code
+    :address, :country, :extension, :country_code, :stripe_token,
+    :coupon, :customer_id
+
+  attr_accessor :country_code, :area_code, :number1,
+    :number2, :extension, :stripe_token, :coupon
 
   def active_for_authentication?
     super && approved?
@@ -61,9 +63,67 @@ class Owner < ActiveRecord::Base
     "#{self.prefix} #{self.first_name} #{self.last_name}"
   end
 
+  def update_stripe
+    return if email.include?('@example.com') and not Rails.env.production?
+    if customer_id.nil?
+      if stripe_token.blank?
+        raise "Stripe token not present. Can't create account."
+      end
+      if coupon.blank?
+        customer = Stripe::Customer.create(
+          :email => email,
+          :description => company_name,
+          :card => stripe_token,
+          :plan => 'thanxup'
+        )
+      else
+        customer = Stripe::Customer.create(
+          :email => email,
+          :description => company_name,
+          :card => stripe_token,
+          :coupon => coupon,
+          :plan => 'thanxup'
+        )
+      end
+    else
+      customer = Stripe::Customer.retrieve(customer_id)
+      if stripe_token.present?
+        customer.card = stripe_token
+      end
+      customer.email = self.email
+      customer.description = self.company_name
+      customer.save
+    end
+    self.last_4_digits = customer.active_card.last4
+    self.customer_id = customer.id
+    self.stripe_token = nil
+  rescue Stripe::StripeError => e
+    logger.error "Stripe Error: " + e.message
+    errors.add :base, "#{e.message}."
+    self.stripe_token = nil
+    false
+  end
+
+  def cancel_subscription
+    unless customer_id.nil?
+      customer = Stripe::Customer.retrieve(customer_id)
+      unless customer.nil? or customer.respond_to?('deleted')
+        if customer.subscription.status == 'active'
+          customer.cancel_subscription
+        end
+      end
+    end
+  rescue Stripe::StripeError => e
+    logger.error "Stripe Error: " + e.message
+    errors.add :base, "Unable to cancel your subscription. #{e.message}."
+    false
+  end
+
+
   private
 
   def create_phone_number
+    [:area_code, :number1, :number2].each { |var| self.errors.add(:phone_number, 'invalid phone number') and return if self.send(var).blank? }
     self.country_code = self.country_code.blank? ? DEFAULT_COUNTRY_CODE : self.country_code
     self.phone_number = Phoner::Phone.new(number: "#{self.number1}#{self.number2}",
                                                   area_code: "#{self.area_code}",

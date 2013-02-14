@@ -1,0 +1,25 @@
+%div{id: "card-data", class: "container"}
+  = form_for current_owner, :url => update_payment_owner_path(id: current_owner.id), :html => {:method => :put, :class => 'form-horizontal card_form' } do |f|
+    - if current_owner.stripe_token
+      %p Credit card acceptance is pending
+    - else
+      .modal-header
+        %h3 Setup Credit Card
+      .modal-body
+        .field
+          = label_tag :card_number, "Credit Card Number"
+          = text_field_tag :card_number, nil, name: nil
+        .field
+          = label_tag :card_code, "Card Security Code (CVV)"
+          = text_field_tag :card_code, nil, name: nil
+        .field
+          = label_tag :card_month, "Card Expiration"
+          = select_month nil, {add_month_numbers: true}, {name: nil, id: "card_month"}
+          = select_year nil, {start_year: Date.today.year, end_year: Date.today.year+10}, {name: nil, id: "card_year"}
+        = f.hidden_field :name
+        = f.hidden_field :email
+        = f.hidden_field :stripe_token
+      #stripe_error
+        %noscript JavaScript is not enabled and is required for this form. First enable it in your web browser settings.
+      .modal-footer
+        = f.submit "Save Credit Card", :class => "btn btn-primary"
