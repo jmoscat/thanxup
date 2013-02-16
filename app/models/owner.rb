@@ -65,14 +65,6 @@ class Owner < ActiveRecord::Base
   validates :first_name, :last_name, :city, :state, :prefix, :address, :zip_code, presence: true
   validates :company_name, :phone_number, presence: true, uniqueness: true
 
-  #def active_for_authentication?
-    #super && approved?
-  #end
-
-  #def inactive_message
-    #approved? ? super : :not_approved
-  #end
-
   def self.send_reset_password_instructions(attributes={})
     recoverable = find_or_initialize_with_errors(reset_password_keys, attributes, :not_found)
     if !recoverable.approved?
@@ -105,44 +97,56 @@ class Owner < ActiveRecord::Base
       return if stripe_token.blank?
       if coupon.blank?
         customer = Stripe::Customer.create(
-          :email => email,
+          :email       => email,
           :description => company_name,
-          :card => stripe_token,
-          :plan => 'thanxup'
+          :card        => stripe_token,
+          :plan        => 'thanxup'
         )
       else
         customer = Stripe::Customer.create(
-          :email => email,
+          :email       => email,
           :description => company_name,
-          :card => stripe_token,
-          :coupon => coupon,
-          :plan => 'thanxup'
+          :card        => stripe_token,
+          :coupon      => coupon,
+          :plan        => 'thanxup'
         )
       end
     else
-      customer = Stripe::Customer.retrieve(customer_id)
-      if stripe_token.present?
-        customer.card = stripe_token
-      end
-      customer.email = self.email
+      customer             = Stripe::Customer.retrieve(customer_id)
+      customer.card        = stripe_token if stripe_token.present?
+      customer.email       = self.email
       customer.description = self.company_name
-      customer.plan = 'thanxup'
+      customer.plan        = 'thanxup'
       customer.save
     end
     self.last_4_digits = customer.active_card.last4
-    self.customer_id = customer.id
-    self.stripe_token = nil
+    self.customer_id   = customer.id
+    self.stripe_token  = nil
   rescue Stripe::StripeError => e
     errors.add :base, "#{e.message}."
     self.stripe_token = nil
     false
   end
 
+  def enable_subscription!
+    unless self.customer_id.blank?
+      customer = Stripe::Customer.retrieve(customer_id)
+      customer.update_subscription :plan => 'thanxup'
+    end
+  end
+
+  def subscribed?
+    unless self.customer_id.blank?
+      customer = Stripe::Customer.retrieve(customer_id)
+      customer.subscription.try(:status) =~ /(active|trialing)/
+    end
+  end
+
   def cancel_subscription
     unless customer_id.nil?
       customer = Stripe::Customer.retrieve(customer_id)
       unless customer.nil? or customer.respond_to?('deleted') or customer.subscription.blank?
-        customer.cancel_subscription if customer.subscription.try(:status) =~ /(active|trialing)/
+        customer.cancel_subscription if subscribed?
       end
     end
   rescue Stripe::StripeError => e

@@ -1,6 +1,5 @@
 class Campaign
   include Ripple::Document
-  include RippleExtensions
 
   TIME_ALLOWANCE = 1.hour
 

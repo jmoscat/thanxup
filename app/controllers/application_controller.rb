@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
   private
 
   def check_for_approval
-    redirect_to unauthorized_path, notice: 'You have limited functionality while we approve your account. Please be patient' if current_owner && !current_owner.approved && (url_for =~ /campaign|coupon|store/ || url_for !~ /(\/thanxup\/(home|about|contact|privacy|terms|unauthorized){1}|\/owners\/\d(\/?\w*))/)
+    redirect_to unauthorized_path, notice: 'You have limited functionality while we approve your account. Please be patient' if current_owner && !current_owner.approved && (url_for =~ /campaign|coupon|store/ || url_for !~ /(sign_out|(\/thanxup\/(home|about|contact|privacy|terms|unauthorized){1}|\/owners\/\d(\/?\w*)))/)
   end
 
 end

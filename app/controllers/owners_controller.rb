@@ -6,11 +6,12 @@ class OwnersController < ApplicationController
   end
 
   def edit_payment
+    @subscribed = current_owner.subscribed?
   end
 
   def update_payment
     if current_owner.update_attribute(:stripe_token, params[:owner][:stripe_token])
-      redirect_to root_path, notice: 'Updated card, begin adding coupons!'
+      redirect_to root_path, notice: 'Updated card, begin thanxuping!'
     else
       flash.alert = 'Unable to update card.'
       render :edit_payment
@@ -25,6 +26,11 @@ class OwnersController < ApplicationController
   def remove_stripe_info
     current_owner.remove_stripe_info
     redirect_to root_path, notice: 'Removed all information from stripe.'
+  end
+
+  def enable_subscription
+    current_owner.enable_subscription!
+    redirect_to root_path, notice: 'Enabled your subscription for $29.99 a month. Thanks!'
   end
 
   private
