@@ -1,25 +1,50 @@
+# == Schema Information
+#
+# Table name: owners
+#
+#  id                     :integer          not null, primary key
+#  email                  :string(255)      default(""), not null
+#  encrypted_password     :string(255)      default(""), not null
+#  remember_created_at    :datetime
+#  reset_password_token   :string(255)
+#  reset_password_sent_at :datetime
+#  sign_in_count          :integer          default(0)
+#  current_sign_in_at     :datetime
+#  last_sign_in_at        :datetime
+#  current_sign_in_ip     :string(255)
+#  last_sign_in_ip        :string(255)
+#  first_name             :string(255)
+#  last_name              :string(255)
+#  suffix                 :string(255)
+#  prefix                 :string(255)
+#  company_name           :string(255)
+#  city                   :string(255)
+#  state                  :string(255)
+#  country                :string(255)
+#  address                :string(255)
+#  zip_code               :string(255)
+#  phone_number           :string(255)
+#  allow_phone_contact    :boolean          default(FALSE), not null
+#  approved               :boolean          default(FALSE), not null
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  logo_file_name         :string(255)
+#  logo_content_type      :string(255)
+#  logo_file_size         :integer
+#  logo_updated_at        :datetime
+#  customer_id            :string(255)
+#  last_4_digits          :string(255)
+#
+
 class Owner < ActiveRecord::Base
-  PREFIXES = ["Mr.", "Miss", "Mrs.", "Ms."]
-  SUFFIXES = ["Jr.", "Sr.", "II", "III", "IV"]
+  PREFIXES             = ["Mr.", "Miss", "Mrs.", "Ms."]
+  SUFFIXES             = ["Jr.", "Sr.", "II", "III", "IV"]
   DEFAULT_COUNTRY_CODE = '1'
-
-  has_attached_file :logo, :styles => { medium: "300x300>", thumb: "100x100>", avatar: "105x50" }
-
-  before_validation :create_phone_number, on: :create
-  before_save :update_stripe, :unless => proc { |obj| obj.validations_to_skip.present? and obj.validations_to_skip.include?('stripe') }
-  before_destroy :cancel_subscription
-  after_create :send_owner_mail
-
-  validates :email, :first_name, :last_name, :company_name, :city, :state,
-    :phone_number, :prefix, presence: true
-
-  validates :password, :password_confirmation, presence: true, if: :password
 
   devise :database_authenticatable, :registerable,
          :rememberable, :trackable, :validatable,
          :recoverable
 
-  # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation,
     :remember_me, :approved, :first_name, :company_name, :city,
     :state, :phone_number, :allow_phone_contact, :logo, :last_name,
@@ -30,13 +55,23 @@ class Owner < ActiveRecord::Base
   attr_accessor :country_code, :area_code, :number1,
     :number2, :extension, :stripe_token, :coupon, :validations_to_skip
 
-  def active_for_authentication?
-    super && approved?
-  end
+  has_attached_file :logo, :styles => { medium: "300x300>", thumb: "100x100>", avatar: "105x50" }
 
-  def inactive_message
-    approved? ? super : :not_approved
-  end
+  before_validation :create_phone_number, on: :create
+  before_update :update_stripe, :unless => proc { |obj| obj.validations_to_skip.present? and obj.validations_to_skip.include?('stripe') }
+  before_destroy :cancel_subscription
+  after_create :send_owner_mail
+
+  validates :first_name, :last_name, :city, :state, :prefix, :address, :zip_code, presence: true
+  validates :company_name, :phone_number, presence: true, uniqueness: true
+
+  #def active_for_authentication?
+    #super && approved?
+  #end
+
+  #def inactive_message
+    #approved? ? super : :not_approved
+  #end
 
   def self.send_reset_password_instructions(attributes={})
     recoverable = find_or_initialize_with_errors(reset_password_keys, attributes, :not_found)
@@ -67,9 +102,7 @@ class Owner < ActiveRecord::Base
   def update_stripe
     return if email.include?('@example.com') and not Rails.env.production?
     if customer_id.nil?
-      if stripe_token.blank?
-        raise "Stripe token not present. Can't create account."
-      end
+      return if stripe_token.blank?
       if coupon.blank?
         customer = Stripe::Customer.create(
           :email => email,
@@ -109,9 +142,7 @@ class Owner < ActiveRecord::Base
     unless customer_id.nil?
       customer = Stripe::Customer.retrieve(customer_id)
       unless customer.nil? or customer.respond_to?('deleted') or customer.subscription.blank?
-        if customer.subscription.try(:status) =~ /(active|trialing)/
-          customer.cancel_subscription
-        end
+        customer.cancel_subscription if customer.subscription.try(:status) =~ /(active|trialing)/
       end
     end
   rescue Stripe::StripeError => e
@@ -131,11 +162,13 @@ class Owner < ActiveRecord::Base
   end
 
   def clear_stripe_info!
-    self.last_4_digits       = nil
-    self.stripe_token        = nil
-    self.customer_id         = nil
+    self.last_4_digits = self.stripe_token = self.customer_id = nil
     self.validations_to_skip = ["stripe"]
     self.save!
+  end
+
+  def stripe_setup?
+    self.customer_id.present? && self.last_4_digits.present?
   end
 
   private
@@ -147,8 +180,10 @@ class Owner < ActiveRecord::Base
                                                   area_code: "#{self.area_code}",
                                                   country_code: "#{self.country_code}",
                                                   extension: "#{self.extension}").format("+ %c (%a)-%f-%l %x")
-    unless Phoner::Phone.valid? self.phone_number
-      self.errors.add(:phone_number, 'invalid phone number')
-    end
+    self.errors.add(:phone_number, 'invalid phone number') unless Phoner::Phone.valid? self.phone_number || self.us_phone?
+  end
+
+  def us_phone?
+    self.phone_number[2] == "1" && self.phone_number.length >= 18
   end
 end

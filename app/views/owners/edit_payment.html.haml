@@ -8,6 +8,8 @@
         - unless current_owner.last_4_digits.nil?
           %h5 Currently using card ending with #{current_owner.last_4_digits} - #{link_to "Cancel Subscription", cancel_payment_owner_path(id: current_owner.id), method: :delete} - #{link_to "Delete Stripe Information", remove_stripe_info_owner_path(id: current_owner.id), method: :delete}
       .modal-body
+        #stripe_error
+          %noscript JavaScript is not enabled and is required for this form. First enable it in your web browser settings.
         .field
           = label_tag :card_number, "Credit Card Number"
           = text_field_tag :card_number, nil, name: nil
@@ -21,7 +23,5 @@
         = f.hidden_field :name
         = f.hidden_field :email
         = f.hidden_field :stripe_token
-      #stripe_error
-        %noscript JavaScript is not enabled and is required for this form. First enable it in your web browser settings.
-      .modal-footer
+      .modal-body
         = f.submit "Save Credit Card", :class => "btn btn-primary"

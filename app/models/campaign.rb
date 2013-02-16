@@ -93,7 +93,7 @@ class Campaign
   end
 
   def add_time_travel_error
-    time_travel_fail = "Cannot create currency sale. You are trying to create a currency sale in a
+    time_travel_fail = "Cannot create campaign. You are trying to create a campaign in a
                         time frame that has already passed us by."
     errors.add :base, time_travel_fail and raise_error!
   end

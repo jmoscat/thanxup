@@ -1,5 +1,5 @@
 class CouponsController < ApplicationController
-  before_filter :setup
+  before_filter :validate_stripe, :setup
   rescue_from Ripple::DocumentInvalid, :with => :invalid_coupon
 
   def index
@@ -59,6 +59,7 @@ class CouponsController < ApplicationController
 
   def setup
     authorize! :manage, Coupon
+    redirect_to new_owner_store_path(owner_id: current_owner.id), notice: 'You need to have a store before you can add a coupon.' if current_owner.stores.blank?
     @store = Store.find(params[:store_id])
   end
 end
