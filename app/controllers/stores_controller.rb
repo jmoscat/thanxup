@@ -1,5 +1,5 @@
 class StoresController < ApplicationController
-  before_filter :authorize
+  before_filter :validate_stripe, :authorize
   rescue_from Ripple::DocumentInvalid, :with => :already_exists
 
   def index

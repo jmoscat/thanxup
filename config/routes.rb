@@ -12,6 +12,13 @@ Thanxup::Application.routes.draw do
     get :subregion_options
   end
   resources :owners, :except => [ :index, :new, :create, :destroy ] do
+    member do
+      get :edit_payment
+      put :update_payment
+      delete :cancel_payment
+      delete :remove_stripe_info
+      put :enable_subscription
+    end
     scope :path => '/admins', :controller => :admins do
       put :approve_owner, :as => :admin_approve_owner
     end

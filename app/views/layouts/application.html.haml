@@ -3,8 +3,10 @@
   %head
     %title Thanxup
     = stylesheet_link_tag    "application", :media => "all"
-    = javascript_include_tag "application"
+    = javascript_include_tag "https://js.stripe.com/v1/", "application"
     = csrf_meta_tags
+    = tag :meta, :name => "stripe-key", :content => STRIPE_PUBLIC_KEY
+
   %body
     .container.navbar-wrapper
       .navbar.navbar-inverse
@@ -12,7 +14,7 @@
           = link_to 'Thanxup', root_path, :class => 'brand'
           .nav-collapse.collapse
             %ul.nav.pull-left
-              - if current_owner
+              - if current_owner && current_owner.customer_id.present?
                 %li.dropdown
                   %a.dropdown-toggle{'data-toggle' => 'dropdown', :href => '#'}
                     Stores
@@ -23,16 +25,18 @@
                       %li.divider
                     %li
                       = link_to 'Add New Store', new_owner_store_path(owner_id: current_owner.id)
-                %li.dropdown
-                  %a.dropdown-toggle{'data-toggle' => 'dropdown', :href => '#'}
-                    Campaigns
-                    %span.caret
-                  %ul.dropdown-menu{:role => 'menu', 'aria-labelleby' => 'dLabel'}
-                    - if current_owner.campaigns.present?
-                      %li #{link_to "View Your Campaigns", owner_campaigns_path(owner_id: current_owner.id)}
-                      %li.divider
-                    %li
-                      = link_to 'Add New Campaign', new_owner_campaign_path(owner_id: current_owner.id)
+
+                - if current_owner.stores.present?
+                  %li.dropdown
+                    %a.dropdown-toggle{'data-toggle' => 'dropdown', :href => '#'}
+                      Campaigns
+                      %span.caret
+                    %ul.dropdown-menu{:role => 'menu', 'aria-labelleby' => 'dLabel'}
+                      - if current_owner.campaigns.present?
+                        %li #{link_to "View Your Campaigns", owner_campaigns_path(owner_id: current_owner.id)}
+                        %li.divider
+                      %li
+                        = link_to 'Add New Campaign', new_owner_campaign_path(owner_id: current_owner.id)
                 - if current_owner.stores.present?
                   %li.dropdown
                     %a.dropdown-toggle{'data-toggle' => 'dropdown', :href => '#'}
@@ -44,6 +48,13 @@
                           %li #{link_to "View #{store.name}'s Coupons", owner_store_coupons_path(owner_id: current_owner.id, store_id: store.key)}
                         %li #{link_to "Add a Coupon to #{store.name}", new_owner_store_coupon_path(owner_id: current_owner.id, store_id: store.key)}
                         %li.divider
+              - if current_owner
+                %li.dropdown
+                  %a.dropdown-toggle{'data-toggle' => 'dropdown', :href => '#'}
+                    Account
+                    %span.caret
+                  %ul.dropdown-menu{:role => 'menu', 'aria-labelleby' => 'dLabel'}
+                    %li #{link_to "Add/Edit/Remove Credit Card", edit_payment_owner_path(id: current_owner.id)}
               %li
                 = link_to 'About', about_path
               %li
