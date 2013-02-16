@@ -34,6 +34,8 @@ class DeviseCreateOwners < ActiveRecord::Migration
       t.boolean :approved, default: false, null: false
       t.timestamps
       t.attachment :logo #for paperclip gem
+      t.string :customer_id
+      t.string :last_4_digits
     end
 
     add_index :owners, :email,                unique: true

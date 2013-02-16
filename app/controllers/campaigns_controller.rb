@@ -1,5 +1,5 @@
 class CampaignsController < ApplicationController
-  before_filter :authorize, :setup
+  before_filter :validate_stripe, :authorize, :setup
   rescue_from Ripple::DocumentInvalid, with: :invalid_campaign
 
   def index
@@ -70,5 +70,6 @@ class CampaignsController < ApplicationController
 
   def setup
     @stores = current_owner.stores
+    redirect_to new_owner_store_path(owner_id: current_owner.id), notice: 'You need to have a store with coupons before you start a campaign.' if @stores.blank? || !@stores.has_coupons?
   end
 end

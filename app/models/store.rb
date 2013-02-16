@@ -31,6 +31,10 @@ class Store
     Coupon.find_by_index('store_id', self.key)
   end
 
+  def has_coupons?
+    available_coupons.present?
+  end
+
   private
 
   def create_phone_number
@@ -39,14 +43,10 @@ class Store
                                                   area_code: "#{self.area_code}",
                                                   country_code: "#{self.country_code}",
                                                   extension: "#{self.extension}").format("+ %c (%a)-%f-%l %x")
-    unless Phoner::Phone.valid? self.contact_phone_number
-      self.errors.add(:contact_phone_number, 'invalid phone number') and raise_error!
-    end
+    self.errors.add(:contact_phone_number, 'invalid phone number') and raise_error! unless Phoner::Phone.valid? self.contact_phone_number
   end
 
   def check_if_exists
-    if Store.find_by_index('owner_id', self.owner_id).collect { |store| store.name }.include?(self.name)
-      self.errors.add(:name, 'already exists') and raise_error!
-    end
+    self.errors.add(:name, 'already exists') and raise_error! if Store.find_by_index('owner_id', self.owner_id).collect { |store| store.name }.include?(self.name)
   end
 end

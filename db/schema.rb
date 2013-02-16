@@ -63,6 +63,8 @@ ActiveRecord::Schema.define(:version => 20121111182156) do
     t.string   "logo_content_type"
     t.integer  "logo_file_size"
     t.datetime "logo_updated_at"
+    t.string   "customer_id"
+    t.string   "last_4_digits"
   end
 
   add_index "owners", ["email"], :name => "index_owners_on_email", :unique => true

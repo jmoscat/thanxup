@@ -73,4 +73,5 @@ group :test, :development do
   gem 'factory_girl_rails'
   gem 'pry'
   gem 'unicorn'
+  gem 'annotate'
 end
